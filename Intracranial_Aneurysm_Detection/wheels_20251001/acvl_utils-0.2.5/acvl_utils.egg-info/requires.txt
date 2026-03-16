@@ -1,0 +1,7 @@
+SimpleITK
+batchgenerators
+blosc2>=3.0.0b4
+connected-components-3d
+numpy
+scikit-image
+torch

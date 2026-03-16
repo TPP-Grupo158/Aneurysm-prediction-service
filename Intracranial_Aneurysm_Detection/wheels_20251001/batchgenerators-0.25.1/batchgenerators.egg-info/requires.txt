@@ -1,0 +1,9 @@
+pillow>=7.1.2
+numpy>=1.10.2
+scipy
+scikit-image
+scikit-learn
+future
+pandas
+unittest2
+threadpoolctl

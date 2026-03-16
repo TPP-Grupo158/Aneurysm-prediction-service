@@ -1,0 +1,108 @@
+.
+└── Intracranial_Aneurysm_Detection
+    ├── Dataset180_2D_vessel_box_seg_stable
+    │   └── nnUNetTrainer__nnUNetPlans__2d
+    │       └── fold_0
+    ├── dicoms
+    │   └── working
+    │       └── my_single_dicom_file
+    ├── inference_prediction
+    ├── nnXNet
+    │   ├── documentation
+    │   │   └── assets
+    │   ├── nnxnet
+    │   │   ├── ensembling
+    │   │   ├── evaluation
+    │   │   ├── experiment_planning
+    │   │   │   ├── dataset_fingerprint
+    │   │   │   ├── experiment_planners
+    │   │   │   │   └── residual_unets
+    │   │   │   └── plans_for_pretraining
+    │   │   ├── imageio
+    │   │   ├── inference
+    │   │   ├── model_sharing
+    │   │   ├── postprocessing
+    │   │   ├── preprocessing
+    │   │   │   ├── cropping
+    │   │   │   ├── normalization
+    │   │   │   ├── preprocessors
+    │   │   │   └── resampling
+    │   │   ├── run
+    │   │   ├── training
+    │   │   │   ├── data_augmentation
+    │   │   │   │   └── custom_transforms
+    │   │   │   ├── dataloading
+    │   │   │   ├── logging
+    │   │   │   ├── loss
+    │   │   │   ├── lr_scheduler
+    │   │   │   └── nnXNetTrainer
+    │   │   │       └── variants
+    │   │   │           ├── benchmarking
+    │   │   │           ├── data_augmentation
+    │   │   │           ├── loss
+    │   │   │           ├── lr_schedule
+    │   │   │           ├── network_architecture
+    │   │   │           ├── optimizer
+    │   │   │           ├── sampling
+    │   │   │           └── training_length
+    │   │   └── utilities
+    │   │       ├── label_handling
+    │   │       └── plans_handling
+    │   └── nnxnet.egg-info
+    ├── ResNet34_Plane_2D_cls
+    ├── RSNA2025_stage2_models
+    │   ├── onlyMirror01_250epochs
+    │   │   └── fold_1
+    │   └── onlyMirror01_lr4e3_100epochs
+    │       └── fold_0
+    └── wheels_20251001
+        ├── acvl_utils-0.2.5
+        │   ├── acvl_utils
+        │   │   ├── array_manipulation
+        │   │   ├── cropping_and_padding
+        │   │   ├── instance_segmentation
+        │   │   ├── miscellaneous
+        │   │   └── morphology
+        │   ├── acvl_utils.egg-info
+        │   └── tests
+        ├── batchgenerators-0.25.1
+        │   ├── batchgenerators
+        │   │   ├── augmentations
+        │   │   ├── dataloading
+        │   │   ├── datasets
+        │   │   ├── examples
+        │   │   │   └── brats2017
+        │   │   ├── transforms
+        │   │   └── utilities
+        │   ├── batchgenerators.egg-info
+        │   └── tests
+        ├── dicom2nifti_20250917
+        │   ├── dicom2nifti
+        │   ├── docs
+        │   │   ├── rst
+        │   │   │   └── static
+        │   │   ├── scripts
+        │   │   └── static
+        │   └── scripts
+        └── dynamic_network_architectures-0.3.1
+            ├── dynamic_network_architectures
+            │   ├── architectures
+            │   ├── building_blocks
+            │   └── initialization
+            └── dynamic_network_architectures.egg-info
+
+92 directories
+
+   FastAPI   Starting development server 🚀
+ 
+             Searching for package file structure from directories with __init__.py files
+ERROR    Import error: No module named 'models_classes'                                                                                        
+WARNING  Ensure all the package directories have an __init__.py file                                                                           
+
+
+   FastAPI   Starting development server 🚀
+ 
+             Searching for package file structure from directories with __init__.py files
+ERROR    Import error: No module named 'prediction_config'                                                                                     
+WARNING  Ensure all the package directories have an __init__.py file                                                                           
+
