@@ -32,8 +32,12 @@ COPY Intracranial_Aneurysm_Detection/requirements.txt /app/requirements.txt
 COPY Intracranial_Aneurysm_Detection/nnXNet /app/Intracranial_Aneurysm_Detection/nnXNet
 RUN python3.11 -m pip install --no-cache-dir --upgrade pip && \
     python3.11 -m pip install /app/wheels/*.whl --no-deps && \
-    python3.11 -m pip install torch==2.6.0 && \
+    # Install torch first
+    python3.11 -m pip install torch==2.6.0 --index-url https://download.pytorch.org/whl/cu124 && \
     python3.11 -m pip install connected-components-3d && \
+    # Install PyG dependencies from the specialized PyG index
+    python3.11 -m pip install torch-scatter torch-sparse torch-cluster torch-spline-conv -f https://data.pyg.org/whl/torch-2.6.0+cu124.html && \
+    # Now install the rest of your requirements
     python3.11 -m pip install --no-cache-dir -r /app/requirements.txt --extra-index-url https://download.pytorch.org/whl/cu124 && \
     python3.11 -m pip install -e /app/Intracranial_Aneurysm_Detection/nnXNet
 # Copy the rest of the application
