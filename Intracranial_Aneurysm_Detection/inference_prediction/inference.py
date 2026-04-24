@@ -166,3 +166,60 @@ def predict(series_path: str) -> pl.DataFrame:
     # ----------------------------------------------------------------------
     
     return pred_df
+
+def predict_from_nifti(nifti_path: str) -> pl.DataFrame:
+    """
+    Make a prediction for a given Nifti path.
+    This function consolidates the core prediction logic into the required format.
+    """
+    series_id = os.path.basename(nifti_path)
+    orig_nii  = nib.load(nifti_path)
+    # Process multi-timepoint data
+    if orig_nii.ndim == 4 and orig_nii.shape[3] > 1:
+        # Get number of timepoints
+        t = orig_nii.shape[3]
+        
+        # Store prediction probabilities for each timepoint
+        all_timepoint_probs = []
+        
+        # Perform inference for each timepoint
+        for t_i in range(t):
+            print(f"Processing timepoint {t_i + 1}/{t}")
+            
+            # Use the reused processing function, passing time index
+            timepoint_probs = process_single_timepoint(
+                orig_nii,
+                time_index=t_i
+            )
+            all_timepoint_probs.append(timepoint_probs)
+        
+        # Combine probabilities from all timepoints, take maximum
+        all_timepoint_probs = np.array(all_timepoint_probs)  # shape: (T, prob_length)
+        probs = np.max(all_timepoint_probs, axis=0)
+        
+    else:
+        # Single timepoint processing
+        probs = process_single_timepoint(
+            orig_nii
+        )
+
+    pred_df = pl.DataFrame(
+        data=[probs.tolist()],
+        schema=LABEL_COLS,
+        orient='row'
+    )
+        
+    # Perform memory cleanup
+    if torch.cuda.is_available():
+        torch.cuda.empty_cache()
+    gc.collect()
+
+    # ----------------------------- IMPORTANT ------------------------------
+    # You MUST have the following code in your `predict` function
+    # to prevent "out of disk space" errors. This is a temporary workaround
+    # as we implement improvements to our evaluation system.
+    shutil.rmtree('/kaggle/shared', ignore_errors=True)
+    # ----------------------------------------------------------------------
+    
+    return pred_df
+
