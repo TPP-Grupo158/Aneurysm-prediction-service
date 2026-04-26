@@ -35,6 +35,7 @@ RUN python3.11 -m pip install --no-cache-dir --upgrade pip && \
     # Install torch first
     python3.11 -m pip install torch==2.6.0 --index-url https://download.pytorch.org/whl/cu124 && \
     python3.11 -m pip install connected-components-3d && \
+    python3.11 -m pip install fastapi[standard] uvicorn python-dotenv && \
     # Install PyG dependencies from the specialized PyG index
     python3.11 -m pip install torch-scatter torch-sparse torch-cluster torch-spline-conv -f https://data.pyg.org/whl/torch-2.6.0+cu124.html && \
     # Now install the rest of your requirements
@@ -47,4 +48,4 @@ COPY . .
 EXPOSE 8000
 
 # Run the application (equivalent to your 'make build' command)
-CMD ["fastapi", "run", "main.py", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["python3.11", "-m", "uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
