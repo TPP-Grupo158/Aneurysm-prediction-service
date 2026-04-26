@@ -24,7 +24,9 @@ from fastapi.middleware.cors import CORSMiddleware
 from typing import Annotated
 import shutil
 import os
-
+import zipfile
+import uuid
+BASE_TMP_PATH = "/tmp/dicoms"
 
 origins = [
     "http://localhost:8001",  # Your Vite dev server
@@ -40,9 +42,42 @@ app.add_middleware(
     allow_methods=["*"],             # Allow all HTTP methods (GET, POST, etc.)
     allow_headers=["*"],             # Allow all headers (Content-Type, etc.)
 )
+
+def cleanup_folder(folder_path: str):
+    """Función para borrar la carpeta después de procesarla"""
+    if os.path.exists(folder_path):
+        shutil.rmtree(folder_path)
+        print(f"Carpeta borrada: {folder_path}")
+
 @app.get("/predict/dicom")
-async def predict_with_dicom():
-    return {"prediction": "result"}
+async def predict_with_dicom(file: UploadFile = File(...)):
+    if not file.filename.endswith(".zip"):
+        raise HTTPException(status_code=400, detail="El archivo debe ser un .zip")
+    unique_id = str(uuid.uuid4())
+    extraction_path = os.path.join(BASE_TMP_PATH, unique_id)
+    os.makedirs(extraction_path, exist_ok=True)
+    zip_path = os.path.join(extraction_path, "temp_upload.zip")
+    try:
+        # 3. Guardar el archivo ZIP recibido en disco
+        with open(zip_path, "wb") as buffer:
+            shutil.copyfileobj(file.file, buffer)
+
+        # 4. Descomprimir
+        with zipfile.ZipFile(zip_path, 'r') as zip_ref:
+            zip_ref.extractall(extraction_path)
+        
+        os.remove(zip_path)
+
+        contenido = os.listdir(extraction_path)
+
+        result=predict(extraction_path)
+
+
+        return {"prediction":result}
+
+    except Exception as e:
+        cleanup_folder(extraction_path)
+        raise HTTPException(status_code=500, detail=f"Error procesando zip: {str(e)}")
 
 @app.get("/predict/nifti")
 async def predict_with_dicom_niftis(file: UploadFile = File(...)):
