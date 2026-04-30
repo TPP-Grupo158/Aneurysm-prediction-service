@@ -73,7 +73,7 @@ async def predict_with_dicom(file: UploadFile = File(...)):
         result=predict(extraction_path)
 
 
-        return {"prediction":result}
+        return {"prediction":result.to_dicts()[0]}
 
     except Exception as e:
         cleanup_folder(extraction_path)
