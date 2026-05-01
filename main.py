@@ -1,5 +1,6 @@
 from pathlib import Path
 import sys
+from schemas import PredictionResponse
 
 BASE_DIR = Path(__file__).resolve().parent
 CURRENT_DIR = str(BASE_DIR / "Intracranial_Aneurysm_Detection")
@@ -49,7 +50,7 @@ def cleanup_folder(folder_path: str):
         shutil.rmtree(folder_path)
         print(f"Carpeta borrada: {folder_path}")
 
-@app.get("/predict/dicom")
+@app.post("/predict/dicom")
 async def predict_with_dicom(file: UploadFile = File(...)):
     if not file.filename.endswith(".zip"):
         raise HTTPException(status_code=400, detail="El archivo debe ser un .zip")
@@ -79,16 +80,26 @@ async def predict_with_dicom(file: UploadFile = File(...)):
         cleanup_folder(extraction_path)
         raise HTTPException(status_code=500, detail=f"Error procesando zip: {str(e)}")
 
-@app.get("/predict/nifti")
+@app.post("/predict/nifti")
 async def predict_with_dicom_niftis(file: UploadFile = File(...)):
     temp_path = f"/tmp/{file.filename}"
-    
-    with open(temp_path, "wb") as buffer:
-        shutil.copyfileobj(file.file, buffer)
-    
-    result=predict_from_nifti(temp_path).to_dicts()[0]
-    shutil.rmtree('/tmp', ignore_errors=True)
-    return {"prediction":result}
+    try:
+        with open(temp_path, "wb") as buffer:
+            shutil.copyfileobj(file.file, buffer)
+        result = predict_from_nifti(temp_path).to_dicts()[0]
+        return PredictionResponse(
+            status="success",
+            db_id="db_id",
+            paciente_id="paciente_id",
+            doctor_id="doctor_id",
+            original_images={"t1": "url_t1"},
+            prediction_result=result,
+            task= "aneurysm",
+            modalities_used=["t1"],
+        )
+    finally:
+        if os.path.exists(temp_path):
+            os.remove(temp_path)
 
 @app.get("/ping/")
 async def ping():
