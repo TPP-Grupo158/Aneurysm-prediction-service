@@ -1,31 +1,13 @@
 # Use a base that supports Python 3.11 more easily or install 3.11 specifically
-FROM nvidia/cuda:12.4.1-devel-ubuntu22.04
+FROM pytorch/pytorch:2.6.0-cuda12.4-cudnn9-runtime
 
-# Set environment variables
-ENV PYTHONDONTWRITEBYTECODE=1
-ENV PYTHONUNBUFFERED=1
-ENV DEBIAN_FRONTEND=noninteractive
-ENV TZ=America/Argentina/Buenos_Aires
-
-WORKDIR /app
-
-# Install Python 3.11 and system dependencies
-RUN apt-get update && \
-    ln -fs /usr/share/zoneinfo/$TZ /etc/localtime && \
-    apt-get install -y \
-    software-properties-common && \
-    add-apt-repository ppa:deadsnakes/ppa && \
-    apt-get update && apt-get install -y \
-    python3.11 \
-    python3.11-dev \
-    python3.11-distutils \
+# 2. Limpieza de sistema inmediata
+RUN apt-get update && apt-get install -y --no-install-recommends \
     libgl1-mesa-glx \
     libglib2.0-0 \
     libgomp1 \
-    curl && \
-    curl -sS https://bootstrap.pypa.io/get-pip.py | python3.11 && \
-    rm -rf /var/lib/apt/lists/*
-
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
 # Copy requirements and install python packages
 COPY Intracranial_Aneurysm_Detection/wheels_20251001 /app/wheels
 COPY Intracranial_Aneurysm_Detection/requirements.txt /app/requirements.txt
@@ -45,7 +27,7 @@ RUN python3.11 -m pip install --no-cache-dir --upgrade pip && \
 COPY . .
 
 # Expose the FastAPI port
-EXPOSE 8000
+EXPOSE 8045
 
 # Run the application (equivalent to your 'make build' command)
-CMD ["python3.11", "-m", "uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["python3.11", "-m", "uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8045"]
