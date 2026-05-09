@@ -18,7 +18,11 @@ services:
     restart: unless-stopped
     networks:
       - aneurysm_network
+      - medical_network
 
 networks:
   aneurysm_network:
     driver: bridge
+  medical_network:
+    external: true
+    name: image_processing_backend_medical_network

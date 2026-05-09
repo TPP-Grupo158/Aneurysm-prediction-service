@@ -14,7 +14,7 @@ import pydicom.dataset
 import pydicom.uid
 from pydicom import dcmread
 
-import common
+import minio
 from dicom2nifti.common import read_dicom_directory, is_philips, is_siemens, is_ge
 
 
@@ -212,7 +212,7 @@ def _anonymize_files(dicom_directory_in, dicom_directory_out, fields_to_keep):
             dicom_file_in = os.path.join(root, file_name)
             current_dir = root[len(dicom_directory_in) + 1:]
             dicom_file_out = os.path.join(dicom_directory_out, current_dir, file_name)
-            if common.is_dicom_file(dicom_file_in):
+            if minio.is_dicom_file(dicom_file_in):
                 logging.info("Processing " + dicom_file_in)
                 _anonymize_file(dicom_file_in, dicom_file_out, fields_to_keep)
             else:

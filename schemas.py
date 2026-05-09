@@ -10,6 +10,6 @@ class PredictionResponse(BaseModel):
     paciente_id: str
     doctor_id: str
     original_images: Dict[str, str]
-    prediction_result: dict
+    prediction_result: str
     task: str
     modalities_used: List[str]
