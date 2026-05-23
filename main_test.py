@@ -1,5 +1,5 @@
 import pytest
-from unittest.mock import patch, MagicMock  # <--- ESTO ES LO QUE FALTA
+from unittest.mock import patch, MagicMock
 from fastapi.testclient import TestClient
 from main import app
 from schemas import PredictionResponse
