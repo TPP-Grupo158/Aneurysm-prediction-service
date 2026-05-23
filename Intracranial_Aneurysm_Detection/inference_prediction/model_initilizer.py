@@ -54,7 +54,7 @@ def init_predictors(device):
         use_gaussian=True,
         use_mirroring=False,
         perform_everything_on_device=True,
-        device=get_device(gpu_id=1 if USE_NUM_GPUS == 2 else 0),
+        device=get_device(gpu_id=0),
         verbose=False
     )
 
