@@ -110,7 +110,7 @@ async def predict_with_dicom_niftis(doctor_id: str = Form(...), paciente_id: str
             paciente_id=paciente_id,
             doctor_id=doctor_id,
             original_images={"t1": url_origin},
-            prediction_result=url,
+            prediction_image=url,
             task= TASK_ANEURYSM,
             modalities_used=["t1"],
         )

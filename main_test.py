@@ -39,7 +39,7 @@ def test_predict_nifti_success(mock_save, mock_predict, mock_upload_p, mock_uplo
         "paciente_id": "1111111",
         "doctor_id": "1",
         "original_images": {"t1": "http://minio/origin"},
-        "prediction_result": "http://minio/pred",
+        "prediction_image": "http://minio/pred",
         "task": "aneurysm",
         "modalities_used": ["t1"],
     }   
