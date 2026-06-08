@@ -12,7 +12,7 @@
 ```
 docker compose -f docker-compose.yml up --build
 ```
-```
+
 ## Tests:
 Una vez levantado el container de docker se puede hacer
 ```
